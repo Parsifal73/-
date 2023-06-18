@@ -2,6 +2,10 @@ import math
 
 def encode_table(filename, password):
     with open(filename, "r", encoding="utf-8") as file:
+        file_password = file.readline().strip()
+        if password != file_password:
+            print("Неверный пароль. Декодирование невозможно.")
+            return
         text = file.read()
     # определяем размеры сетки. Если размер текста меньше 25и символов, то берем сетку 5х5.
     # Иначе берем корень из размера текста и округляем вверх — это будет сторона сетки.
