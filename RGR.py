@@ -5,18 +5,23 @@ from Diffy_Khelman import encode_Diffy, decode_Diffy
 
 # Функция ввода текста
 def input_text():
-    text = input("Введите текст: ")
     filename = input("Введите имя файла для сохранения: ")
+    text = input("Введите текст: ")
+    password = input("Ввидите пароль: ")
     with open(filename, "w", encoding="utf-8") as file:
+        file.write(password + "\n")
         file.write(text)
     print("Текст сохранен в файл", filename)
 
 
 # Функция печати файла на экране
 def print_file(filename):
-    with open(filename, "r", encoding="utf-8") as file:
-        text = file.read()
-    print(text)
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            text = file.read()
+        print(text)
+    except:
+        print("Неверное название файла")
 
 
 # Основная программа
@@ -33,6 +38,7 @@ while True:
     if choice == "1":
         input_text()
 
+
     elif choice == "2":
         filename = input("Введите имя файла для кодирования: ")
         password = input("Введите пароль для кодирования: ")
@@ -41,41 +47,52 @@ while True:
         print("2 - шифрование Цезаря")
         print("3 - шифрование Диффи-Хеллмана")
         method = input("Введите номер метода кодирования (1-3): ")
+
         if method == "1":
             encode_table(filename, password)
+
         if method == "2":
             global language
             shift = int(input("Введите количество сдвига: "))
             language = input("Укажите язык, на котором написано сообщение('Русский' или 'Английский'): ")
-            if language == "Русский":
-                encode_Cezar_Russia(filename, shift, password)
-            elif language == "Английский":
-                encode_Cezar_English(filename, shift, password)
+            if language == "Русский" or language == "Russia":
+                encode_Cezar_Russia(filename, password, shift)
+            elif language == "Английский" or language == "English":
+                encode_Cezar_English(filename, password, shift)
+
         if method == "3":
             a = int(input("Введите публичный ключ: "))
             encode_Diffy(filename, password, a)
+
 
     elif choice == "3":
         filename = input("Введите имя файла для декодирования: ")
         password = input("Введите пароль для декодирования: ")
         method = input("Введите номер метода кодирования (1-3): ")
+
         if method == "1":
             decode_table(filename, password)
+
         if method == "2":
             # language = input("Какой язык вы выбирали? ")
             if language == "Русский":
                 decode_Cezar_Russia(filename, password)
             if language == "Английский":
                 decode_Cezar_English(filename, password)
+
         if method == "3":
             decode_Diffy(filename, password)
+
 
     elif choice == "4":
         filename = input("Введите имя файла для печати: ")
         print_file(filename)
 
+
     elif choice == "5":
         print("Выход.")
         break
+
+
     else:
         print("Неверный выбор. Попробуйте еще раз.")
