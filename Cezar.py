@@ -1,10 +1,16 @@
-from RGR import shift
+import linecache
 
-def encode_Cezar_English(filename, shift, password):
+def encode_Cezar_English(filename, password, shift):
     encoded_text = ""
     with open(filename, "r", encoding="utf-8") as file:
+        file_password = file.readline().strip()
+        if password != file_password:
+            print("Неверный пароль. Декодирование невозможно.")
+            return
         text = file.read()
     # encrypted = []
+
+    # shift = int(input("Введите количество сдвига: "))
 
     for c in text:
         if c.isupper():  # проверить, является ли символ прописным
@@ -32,14 +38,21 @@ def encode_Cezar_English(filename, shift, password):
     # encrypted_message = ''.join(encrypted)
     with open(encoded_filename, "w", encoding="utf-8") as file:
         file.write(password + "\n")
+        file.write(str(shift) + "\n")
         file.write(encoded_text)
     print("Текст успешно закодирован и сохранен в файл", encoded_filename)
 
-def encode_Cezar_Russia(filename, shift, password):
+def encode_Cezar_Russia(filename, password, shift):
     encoded_text = ""
     with open(filename, "r", encoding="utf-8") as file:
+        file_password = file.readline().strip()
+        if password != file_password:
+            print("Неверный пароль. Декодирование невозможно.")
+            return
         text = file.read()
     # encrypted = []
+
+    # shift = int(input("Введите количество сдвига: "))
 
     for c in text:
         if c.isupper():  # проверить, является ли символ прописным
@@ -67,6 +80,7 @@ def encode_Cezar_Russia(filename, shift, password):
     # encrypted_message = ''.join(encrypted)
     with open(encoded_filename, "w", encoding="utf-8") as file:
         file.write(password + "\n")
+        file.write(str(shift) + "\n")
         file.write(encoded_text)
     print("Текст успешно закодирован и сохранен в файл", encoded_filename)
 
@@ -75,10 +89,12 @@ def encode_Cezar_Russia(filename, shift, password):
 def decode_Cezar_English(filename, password):
     decoded_message = ""
     with open(filename, "r", encoding="utf-8") as file:
-        file_password = file.readline().strip()
+        # file_password = file.readline().strip()
+        file_password = linecache.getline(filename, 1)
         if password != file_password:
             print("Неверный пароль. Декодирование невозможно.")
             return
+        shift = int(linecache.getline(filename, 2))
         encoded_text = file.read()
     # decoded_message = []
 
@@ -86,7 +102,7 @@ def decode_Cezar_English(filename, password):
     for c in encoded_text:
         if c.isupper():
             c_index = ord(c) - ord('A')
-            # sсдвинуть текущий символ влево на позицию клавиши, чтобы получить его исходное положение
+            # сдвинуть текущий символ влево на позицию клавиши, чтобы получить его исходное положение
             c_og_pos = (c_index - int(shift)) % 26 + ord('A')
             c_og = chr(c_og_pos)
             decoded_message += c_og
@@ -113,10 +129,12 @@ def decode_Cezar_English(filename, password):
 def decode_Cezar_Russia(filename, password):
     decoded_message = ""
     with open(filename, "r", encoding="utf-8") as file:
-        file_password = file.readline().strip()
+        # file_password = file.readline().strip()
+        file_password = linecache.getline(filename, 1)
         if password != file_password:
             print("Неверный пароль. Декодирование невозможно.")
             return
+        shift = int(linecache.getline(filename, 2))
         encoded_text = file.read()
     # decoded_message = []
 
@@ -124,7 +142,7 @@ def decode_Cezar_Russia(filename, password):
     for c in encoded_text:
         if c.isupper():
             c_index = ord(c) - ord('А')
-            # sсдвинуть текущий символ влево на позицию клавиши, чтобы получить его исходное положение
+            # сдвинуть текущий символ влево на позицию клавиши, чтобы получить его исходное положение
             c_og_pos = (c_index - int(shift)) % 33 + ord('А')
             c_og = chr(c_og_pos)
             decoded_message += c_og
