@@ -1,15 +1,20 @@
 import random
-from RGR import a
+import linecache
 
 # Функция кодирования
 def encode_Diffy(filename, password, a):
     encoded_text = ""
     with open(filename, "r", encoding="utf-8") as file:
+        file_password = file.readline().strip()
+        # file_password = linecache.getline(filename, 1)
+        if password != file_password:
+            print("Неверный пароль. Декодирование невозможно.")
+            return
         text = file.read()
 
+    # a = int(input("Введите публичный ключ: "))
+
     s = text
-    a = int(a)
-    global p, g, b
 
     # Задаем параметры протокола
     p = random.randint(1, 1000)  # простое число
@@ -44,6 +49,10 @@ def encode_Diffy(filename, password, a):
     encoded_filename = "encoded_" + filename
     with open(encoded_filename, "w", encoding="utf-8") as file:
         file.write(password + "\n")
+        file.write(str(a) + "\n")
+        file.write(str(b) + "\n")
+        file.write(str(g) + "\n")
+        file.write(str(p) + "\n")
         file.write(s)
     print("Текст успешно закодирован и сохранен в файл", encoded_filename)
 
@@ -52,15 +61,20 @@ def encode_Diffy(filename, password, a):
 def decode_Diffy(filename, password):
     decoded_text = ""
     with open(filename, "r", encoding="utf-8") as file:
-        file_password = file.readline().strip()
+        # file_password = file.readline().strip()
+        file_password = linecache.getline(filename, 1)
         if password != file_password:
             print("Неверный пароль. Декодирование невозможно.")
             return
+        a = int(linecache.getline(filename, 2))
+        b = int(linecache.getline(filename, 3))
+        g = int(linecache.getline(filename, 4))
+        p = int(linecache.getline(filename, 5))
         encoded_text = file.read()
     s = encoded_text
 
     # Сторона A вычисляет свой публичный ключ
-    A_1 = pow(g, int(a))
+    A_1 = pow(g, a)
     A = A_1 % p
 
     # Сторона B вычисляет свой публичный ключ
@@ -68,7 +82,7 @@ def decode_Diffy(filename, password):
     B = B_1 % p
 
     # Обе стороны вычисляют общий секретный ключ
-    kA_1 = pow(B, int(a))
+    kA_1 = pow(B, a)
     kA = kA_1 % p
     kB_1 = pow(A, b)
     kB = kB_1 % p
