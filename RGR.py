@@ -18,6 +18,7 @@ class Rgr():
         self.b1 = Button(self.f, width = 21, height = 2, text = "Ввод и Сохранение файла", command = self.input_text)
         self.b2 = Button(self.f, width = 21, height = 2, text = "Кодирование текста", command = self.encode)
         self.b3 = Button(self.f, width = 21, height = 2, text = "Декодирование текста", command = self.decode)
+        self.b40 = Button(self.f, width = 21, height = 2, text = "Вывод текста", command = self.open)
 
         self.canvas = Canvas(self.f, width = 120, height = 50)
 
@@ -28,6 +29,7 @@ class Rgr():
         self.b1.pack()
         self.b2.pack()
         self.b3.pack()
+        self.b40.pack()
 
         self.animate()
 
@@ -39,6 +41,7 @@ class Rgr():
 
     def input_text(self):
         self.f2 = Frame()
+        self.f22 = Frame()
         self.l = Label(self.f2, width = 21, height = 2, text = "Ввведите секретное слово")
         self.e = Entry(self.f2)
         self.l1 = Label(self.f2, width = 15, height = 2, text = "Ввведите текст")
@@ -51,17 +54,20 @@ class Rgr():
         
         self.l2 = Label(self.f2, width = 15, height = 2, text = "Ввведите имя файла")
         self.e2 = Entry(self.f2)
-        self.b5 = Button(self.f2, width = 15, height = 2, text = "Сохранить", command = self.input_text_b)
+        self.b5 = Button(self.f22, width = 15, height = 2, text = "Сохранить", command = self.input_text_b)
+        self.des = Button(self.f22, width = 15, height = 2, text = "Выход", command = self.input_text_destroy)
 
         self.f2.pack()
+        self.f22.pack()
         self.l.pack()
         self.e.pack()
         self.l2.pack()
         self.e2.pack()
         self.l1.pack()
-        self.text.pack()
+        self.text.pack(side = LEFT)
         self.scroll.pack(side = LEFT, fill = Y)
-        self.b5.pack(side = BOTTOM)
+        self.b5.pack()
+        self.des.pack()
 
         self.filename = self.e2.get()
 
@@ -69,7 +75,13 @@ class Rgr():
         with open(self.e2.get(), "w", encoding="utf-8") as self.file:
             self.file.write(self.e.get() + "\n")
             self.file.write(self.text.get(1.0, END))
+            
         self.f2.destroy()
+        self.f22.destroy()
+
+    def input_text_destroy(self):
+        self.f2.destroy()
+        self.f22.destroy()
 
     def encode(self):  
         self.f3 = Frame()
@@ -110,7 +122,7 @@ class Rgr():
 
         self.x = encrypt(self.text)
 
-        self.encoded_filename = "encoded_shamir_" + self.e4.get()
+        self.encoded_filename = "encoded_" + self.e4.get()
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -131,7 +143,7 @@ class Rgr():
 
         self.x = encode_rsa(self.text)
 
-        self.encoded_filename = "encoded_RSA_" + self.e4.get()
+        self.encoded_filename = "encoded_" + self.e4.get()
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -153,7 +165,7 @@ class Rgr():
 
         self.x = coding_skitala(self.text, self.m)
 
-        self.encoded_filename = "encoded_skitala_" + self.e4.get()
+        self.encoded_filename = "encoded_" + self.e4.get()
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -173,7 +185,7 @@ class Rgr():
 
         self.x = encode_table(self.text)
 
-        self.encoded_filename = "encoded_table_" + self.e4.get()
+        self.encoded_filename = "encoded_" + self.e4.get()
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -210,7 +222,7 @@ class Rgr():
 
         self.x = encode_Cezar_English(self.text, self.e10.get())
 
-        self.encoded_filename = "encoded_Cezar_" + self.file_name
+        self.encoded_filename = "encoded_" + self.file_name
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -226,7 +238,7 @@ class Rgr():
 
         self.x = encode_Cezar_Russia(self.text, self.e10.get())
 
-        self.encoded_filename = "encoded_Cezar_" + self.file_name
+        self.encoded_filename = "encoded_" + self.file_name
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -246,7 +258,7 @@ class Rgr():
 
         self.x = encode_Diffy(self.text)
 
-        self.encoded_filename = "encoded_Diffy_" + self.e4.get()
+        self.encoded_filename = "encoded_" + self.e4.get()
 
         with open(self.encoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -284,7 +296,7 @@ class Rgr():
 
 
     def shamir_decode_text_b(self):
-        self.decode = "encoded_shamir_" + self.e6.get()
+        self.decode = "encoded_" + self.e6.get()
         self.decode1 = self.e6.get()
         self.text_decode = list()
         with open(self.decode, "r", encoding = "utf-8") as self.file:
@@ -302,7 +314,7 @@ class Rgr():
         self.z = decrypt(self.text_decode)
 
             
-        self.decoded_filename = "decoded_shamir_" + self.decode1
+        self.decoded_filename = "decoded_" + self.decode1
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
             self.file.write(self.z)
@@ -310,7 +322,7 @@ class Rgr():
         self.f4.destroy()
 
     def RSA_decode_text_b(self):
-        self.decode = "encoded_RSA_" + self.e6.get()
+        self.decode = "encoded_" + self.e6.get()
         self.decode1 = self.e6.get()
         self.text_decode = list()
         with open(self.decode, "r", encoding = "utf-8") as self.file:
@@ -328,7 +340,7 @@ class Rgr():
         self.z = decode_rsa(self.text_decode)
 
             
-        self.decoded_filename = "decoded_RSA_" + self.decode1
+        self.decoded_filename = "decoded_" + self.decode1
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
             self.file.write(self.z)
@@ -337,7 +349,7 @@ class Rgr():
 
     def skitala_decode_text_b(self):
         self.m = 3
-        self.decode = "encoded_skitala_" + self.e6.get()
+        self.decode = "encoded_" + self.e6.get()
         self.decode1 = self.e6.get()
         with open(self.decode, "r", encoding = "utf-8") as self.file:
             self.file_password = self.file.readline().strip()
@@ -351,7 +363,7 @@ class Rgr():
         self.z = coding_skitala(self.text, self.m)
 
             
-        self.decoded_filename = "decoded_skitala_" + self.decode1
+        self.decoded_filename = "decoded_" + self.decode1
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
             self.file.write(self.z)
@@ -359,7 +371,7 @@ class Rgr():
         self.f4.destroy()
 
     def table_decode_text_b(self):
-        self.decode = "encoded_table_" + self.e6.get()
+        self.decode = "encoded_" + self.e6.get()
         self.decode1 = self.e6.get()
         with open(self.decode, "r", encoding = "utf-8") as self.file:
             self.file_password = self.file.readline().strip()
@@ -373,7 +385,7 @@ class Rgr():
         self.z = decode_table(self.text)
 
             
-        self.decoded_filename = "decoded_table_" + self.decode1
+        self.decoded_filename = "decoded_" + self.decode1
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
             self.file.write(self.z)
@@ -382,7 +394,7 @@ class Rgr():
 
 
     def Cezar_decode_text_b(self):
-        self.decode = "encoded_Cezar_" + self.e6.get()
+        self.decode = "encoded_" + self.e6.get()
         with open(self.decode, "r", encoding="utf-8") as self.file:
             self.file_password = self.file.readline().strip()
             if self.e5.get() != self.file_password:
@@ -404,14 +416,14 @@ class Rgr():
                 self.f4.destroy()
 
     def Cezar_english_decode_text_b(self):
-        self.decode = "encoded_Cezar_" + self.file_name
+        self.decode = "encoded_" + self.file_name
         with open(self.decode, "r", encoding="utf-8") as self.file:
             self.file_password = self.file.readline().strip()
             self.text = self.file.read()
 
         self.z = decode_Cezar_English(self.text, self.e11.get())
 
-        self.decoded_filename = "decoded_Cezar_" + self.file_name
+        self.decoded_filename = "decoded_" + self.file_name
 
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -421,14 +433,14 @@ class Rgr():
         mb.showinfo(":)", "Text successfully decoded")
 
     def Cezar_russian_decode_text_b(self):
-        self.decode = "encoded_Cezar_" + self.file_name
+        self.decode = "encoded_" + self.file_name
         with open(self.decode, "r", encoding="utf-8") as self.file:
             self.file_password = self.file.readline().strip()
             self.text = self.file.read()
 
         self.z = decode_Cezar_Russia(self.text, self.e11.get())
 
-        self.decoded_filename = "decoded_Cezar_" + self.file_name
+        self.decoded_filename = "decoded_" + self.file_name
 
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
@@ -438,7 +450,7 @@ class Rgr():
         mb.showinfo(":)", "Text successfully decoded")
 
     def Diffy_decode_text_b(self):
-        self.decode = "encoded_Diffy_" + self.e6.get()
+        self.decode = "encoded_" + self.e6.get()
         self.decode1 = self.e6.get()
         with open(self.decode, "r", encoding = "utf-8") as self.file:
             self.file_password = self.file.readline().strip()
@@ -452,12 +464,67 @@ class Rgr():
         self.z = decode_Diffy(self.text)
 
             
-        self.decoded_filename = "decoded_Diffy_" + self.decode1
+        self.decoded_filename = "decoded_" + self.decode1
         with open(self.decoded_filename, "w", encoding="utf-8") as self.file:
             self.file.write(self.file_password + "\n")
             self.file.write(self.z)
 
         self.f4.destroy()
+
+    def open(self):
+        self.f10 = Frame()
+        self.f11 = Frame()
+
+        self.e20 = Entry(self.f10)
+        self.b30 = Button(self.f10, width = 8, text = "Оригинал", command = self.open_original)
+        self.b31 = Button(self.f10, width = 8, text = "Энкод", command = self.open_encode)
+        self.b32 = Button(self.f10, width = 8, text = "Дэкод", command = self.open_decode)
+        self.b33 = Button(self.f10, width = 8, text = "Выход", command = self.open_destroy)
+        self.text2 = Text(self.f11, width = 50, height = 20)
+        self.scroll1 = Scrollbar(self.f11, command = self.text2.yview)
+
+        self.text2.config(yscrollcommand = self.scroll1.set)
+
+        self.f10.pack()
+        self.f11.pack()
+        self.e20.pack(side = LEFT)
+        self.b30.pack(side = LEFT)
+        self.b31.pack(side = LEFT)
+        self.b32.pack(side = LEFT)
+        self.b33.pack(side = LEFT)
+        self.text2.pack(side = LEFT)
+        self.scroll1.pack(side = LEFT, fill = Y)
+
+    def open_original(self):
+        with open(self.e20.get(), "r", encoding="utf-8") as self.file:
+            self.file_password = self.file.readline().strip()
+            self.text3 = self.file.read()
+
+        self.text2.delete(0.0, END)
+        self.text2.insert(1.0, self.text3)
+
+    def open_encode(self):
+        self.encode = "encoded_" + self.e20.get()
+        with open(self.encode, "r", encoding="utf-8") as self.file:
+            self.file_password = self.file.readline().strip()
+            self.text3 = self.file.read()
+
+        self.text2.delete(0.0, END)
+        self.text2.insert(1.0, self.text3)
+
+    def open_decode(self):
+        self.decode = "decoded_" + self.e20.get()
+        with open(self.decode, "r", encoding="utf-8") as self.file:
+            self.file_password = self.file.readline().strip()
+            self.text3 = self.file.read()
+
+        self.text2.delete(0.0, END)
+        self.text2.insert(1.0, self.text3)
+
+    def open_destroy(self):
+        self.f10.destroy()
+        self.f11.destroy()
+        
 
 x = Rgr()
 
